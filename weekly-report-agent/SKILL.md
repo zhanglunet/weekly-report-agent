@@ -10,6 +10,14 @@ metadata:
 
 Use this skill to generate a weekly report from Feishu/Lark activity and prior reports.
 
+## One-Sentence Use
+
+After installation, the user can say:
+
+```text
+用 weekly-report-agent，授权我的飞书账号，读取我提供的上周周报或周报文件夹，生成本周周报。
+```
+
 ## Required Flow
 
 1. Authorize Lark as the end user.

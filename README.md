@@ -2,6 +2,22 @@
 
 一个用于 Hermes/Codex 的周报生成 Skill。它会读取上周或历来周报，自动采集本周飞书/Lark 中的聊天、会议纪要、云文档和知识库线索，跟踪上周任务进展，并生成本周周报草稿。
 
+## 一句话安装和使用
+
+安装：
+
+```bash
+npx skills add https://github.com/zhanglunet/weekly-report-agent/tree/main/weekly-report-agent
+```
+
+使用：
+
+```text
+用 weekly-report-agent，授权我的飞书账号，读取我提供的上周周报或周报文件夹，生成本周周报。
+```
+
+就这两句。安装后重启 Hermes/Codex，让新 Skill 生效。
+
 ## 功能
 
 - 飞书 user 身份授权，读取用户本人可见范围内的数据。
@@ -35,7 +51,7 @@
 - `generate_report.py`：生成 Markdown 周报。
 - `validate_report.py`：校验周报和证据链。
 
-## 快速开始
+## 本地快速验证
 
 用内置 fixture 跑通 dry-run：
 
@@ -149,4 +165,3 @@ Hermes 侧建议映射的 actions：
 - 校验报告输出。
 
 真实飞书端到端运行需要可用的 `lark-cli` 配置、飞书应用权限和用户授权。
-

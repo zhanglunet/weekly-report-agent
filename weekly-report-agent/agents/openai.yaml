@@ -1,4 +1,3 @@
 display_name: 周报生成智能体
 short_description: 授权飞书后，结合上周周报、聊天、会议纪要和云文档生成本周周报。
-default_prompt: 请授权我的飞书账号，读取我提供的上周周报或周报文件夹，自动整理本周飞书信息并生成本周周报。
-
+default_prompt: 用 weekly-report-agent，授权我的飞书账号，读取我提供的上周周报或周报文件夹，生成本周周报。
