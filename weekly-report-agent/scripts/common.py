@@ -262,13 +262,21 @@ def safe_id(prefix: str, value: str) -> str:
 
 
 def redact_sensitive(text: str) -> str:
-    patterns = [
-        r"(access_token|refresh_token|appSecret|app_secret|tenant_access_token)[=:]\s*['\"]?[^'\"\s]+",
-        r"Bearer\s+[A-Za-z0-9._-]+",
-    ]
     result = text
-    for pattern in patterns:
-        result = re.sub(pattern, r"\1=<redacted>", result, flags=re.IGNORECASE)
+    key_pattern = r"(?:access_token|refresh_token|appSecret|app_secret|tenant_access_token)"
+
+    def redact_key_value(match: re.Match[str]) -> str:
+        prefix = match.group(1)
+        quote = match.group(2) or ""
+        return f"{prefix}{quote}<redacted>{quote}"
+
+    result = re.sub(
+        rf"((?:['\"]?{key_pattern}['\"]?\s*[:=]\s*))(['\"]?)[^'\"\s,}}]+(['\"]?)",
+        redact_key_value,
+        result,
+        flags=re.IGNORECASE,
+    )
+    result = re.sub(r"Bearer\s+[A-Za-z0-9._-]+", "Bearer <redacted>", result, flags=re.IGNORECASE)
     return result
 
 
@@ -277,4 +285,3 @@ def env_bool(name: str, default: bool = False) -> bool:
     if value is None:
         return default
     return value.lower() in {"1", "true", "yes", "on"}
-
