@@ -268,7 +268,12 @@ def redact_sensitive(text: str) -> str:
     ]
     result = text
     for pattern in patterns:
-        result = re.sub(pattern, r"\1=<redacted>", result, flags=re.IGNORECASE)
+        def repl(match: re.Match[str]) -> str:
+            if match.lastindex:
+                return f"{match.group(1)}=<redacted>"
+            return "<redacted>"
+
+        result = re.sub(pattern, repl, result, flags=re.IGNORECASE)
     return result
 
 

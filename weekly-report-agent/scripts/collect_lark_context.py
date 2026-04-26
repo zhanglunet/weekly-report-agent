@@ -135,8 +135,11 @@ def collect_command_json(command: list[str], out: Path, raw_name: str) -> tuple[
 
 def collect_lark(start: str, end: str, keywords: list[str], sources: set[str], out: Path) -> list[EvidenceItem]:
     evidence: list[EvidenceItem] = []
-    start_ts = str(iso_to_epoch_seconds(start))
-    end_ts = str(iso_to_epoch_seconds(end))
+    # lark-cli currently expects ISO timestamps for these high-level helpers.
+    # Older drafts used epoch seconds with --start-time/--end-time, which now
+    # fails with "unknown flag" or field validation errors.
+    start_ts = start
+    end_ts = end
 
     if "im" in sources:
         for idx, keyword in enumerate(keywords[:20]):
@@ -146,9 +149,9 @@ def collect_lark(start: str, end: str, keywords: list[str], sources: set[str], o
                 "+messages-search",
                 "--query",
                 keyword,
-                "--start-time",
+                "--start",
                 start_ts,
-                "--end-time",
+                "--end",
                 end_ts,
                 "--format",
                 "json",
@@ -161,7 +164,7 @@ def collect_lark(start: str, end: str, keywords: list[str], sources: set[str], o
                 evidence.append(item)
 
     if "meeting" in sources:
-        command = ["lark-cli", "vc", "+search", "--start-time", start_ts, "--end-time", end_ts, "--format", "json"]
+        command = ["lark-cli", "vc", "+search", "--start", start_ts, "--end", end_ts, "--format", "json"]
         data, raw_path = collect_command_json(command, out, "vc_search")
         records = data.get("items", data if isinstance(data, list) else []) if data else []
         meeting_ids = []
